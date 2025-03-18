@@ -52,7 +52,45 @@ def on_complete(req):
 
 # 發送 AJAX 請求
 ajax.get(url, oncomplete=on_complete)</pre>
-<h2>task2</h2>
+<p></p>
+<pre class="brush:py;auto-links:false;toolbar:false" contenteditable="false">from browser import html, document, ajax
+
+url = "https://mde.tw/list/2b.txt"
+
+# G7 組員學號
+g7_members = {"41023114", "41223218", "41223230", "41223247", "41223250", "41223240"}
+
+def on_complete(req):
+    if req.status == 200:
+        data = req.text.splitlines()
+        all_stud = data[1:]  # 去除標題行
+
+        # 建立 UL 列表
+        stud_list = html.UL()
+
+        for stud in all_stud:
+            fields = stud.split()  # 假設學號和帳號以空白分隔
+            if len(fields) &gt;= 2:
+                stud_id, account = fields[:2]
+
+                # 只顯示 G7 組員
+                if stud_id in g7_members:
+                    link = f"https://mdecd2025.github.io/hw-{stud_id}"
+                    stud_list &lt;= html.LI([
+                        f"{account} - ",
+                        html.A(link, href=link, target="_blank")
+                    ])
+
+        # 插入到網頁中
+        document["brython_div1"] &lt;= html.P(f"G7 組員 ({len(g7_members)} 名)：")
+        document["brython_div1"] &lt;= stud_list
+
+    else:
+        document["brython_div1"] &lt;= html.P("無法取得資料")
+
+# 發送 AJAX 請求
+ajax.get(url, oncomplete=on_complete) </pre>
+<p></p><h2>task2</h2>
 <h2>task3</h2>
 <h2>task4</h2>
 <h2>task5</h2>
